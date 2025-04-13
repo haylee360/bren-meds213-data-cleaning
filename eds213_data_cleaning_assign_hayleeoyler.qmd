@@ -1,0 +1,76 @@
+---
+title: "HW 2 Data Cleaning"
+author: "Haylee Oyler"
+format: html
+editor: source
+execute:
+  warning: false
+  message: false
+---
+
+## EDS 213 Homework 2 - Data Cleaning
+
+```{r}
+# Load libraries
+library(tidyverse)
+library(here)
+
+
+# Import data
+snow_cover <- read_csv(here("data", "processed", "snow_cover.csv"))
+```
+
+```{r}
+# View summary information about the data frame
+glimpse(snow_cover)
+```
+### Data exploration 
+
+We can see that the type for `Water_cover`, `Land_cover` and `Total_cover` are not what we expect. Let's follow similar steps from our in-class exercise with `Snow_cover` to clean these three columns
+
+```{r}
+# Make a list so we can do this iteratively 
+columns <- c('Water_cover', 'Land_cover', 'Total_cover')
+
+# Check out water cover counts
+for (col in columns) {
+  snow_cover %>% 
+    count(!!sym(col)) %>% 
+    print()
+}
+
+# snow_cover %>%
+#   count(Water_cover)
+
+```
+
+
+
+```{r}
+# View just the rows that show as NA when converting to numeric
+for (col in columns){
+  snow_cover %>%
+  count(!!sym(col)) %>% 
+  filter(is.na(as.numeric(!!sym(col)))) %>% 
+    print()
+}
+# snow_cover %>%
+#   count(Water_cover) %>% 
+#   filter(is.na(as.numeric(Water_cover)))
+
+```
+All three variables having non-numeric values of `.`, `-`, and `n/a`. We will remove these all at once in the next section 
+
+### Data Cleaning
+
+#### `.` values
+
+```{r}
+for (col in columns){
+  snow_clean <- snow_cover %>% 
+  mutate(!!sym(col) = ifelse(!!sym(col) == ".", NA, !!sym(col)))
+}
+snow_clean
+
+```
+
