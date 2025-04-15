@@ -14,6 +14,7 @@ execute:
 # Load libraries
 library(tidyverse)
 library(here)
+library(naniar)
 
 
 # Import data
@@ -24,6 +25,7 @@ snow_cover <- read_csv(here("data", "processed", "snow_cover.csv"))
 # View summary information about the data frame
 glimpse(snow_cover)
 ```
+
 ### Data exploration 
 
 We can see that the type for `Water_cover`, `Land_cover` and `Total_cover` are not what we expect. Let's follow similar steps from our in-class exercise with `Snow_cover` to clean these three columns
@@ -32,19 +34,15 @@ We can see that the type for `Water_cover`, `Land_cover` and `Total_cover` are n
 # Make a list so we can do this iteratively 
 columns <- c('Water_cover', 'Land_cover', 'Total_cover')
 
-# Check out water cover counts
+# Check out counts for all three variables
 for (col in columns) {
   snow_cover %>% 
-    count(!!sym(col)) %>% 
+    count(!!sym(col)) %>% # !!sym allows the column names to be interpreted as columns, not strings
     print()
 }
 
-# snow_cover %>%
-#   count(Water_cover)
-
 ```
-
-
+All three columns count non-numeric values like `.` and `-`. the `Land_cover` column also has some negative values, which seems like it could be an error. 
 
 ```{r}
 # View just the rows that show as NA when converting to numeric
@@ -54,23 +52,87 @@ for (col in columns){
   filter(is.na(as.numeric(!!sym(col)))) %>% 
     print()
 }
-# snow_cover %>%
-#   count(Water_cover) %>% 
-#   filter(is.na(as.numeric(Water_cover)))
 
 ```
-All three variables having non-numeric values of `.`, `-`, and `n/a`. We will remove these all at once in the next section 
+All three variables having non-numeric values of `.`, `-`, and `n/a`. `Water_cover` and `Land_cover` also have `unk` as a non-numeric value and `Total_cover` has a row tag entry that seems like an error. We will remove these all at once in the next section
 
 ### Data Cleaning
 
-#### `.` values
+Here, I use the `replace_with_na` function from the `naniar` package to convert all the non-numeric values above to NAs across the three columns
 
 ```{r}
+# Replace non-numerics with NAs
+snow_clean <- replace_with_na(snow_cover,
+                              replace = list(
+                                Land_cover = c(".", "-", "n/a", "unk"),
+                                Water_cover = c(".", "-", "n/a", "unk"),
+                                Total_cover = c(".", "-", "n/a", "<row r=\\64\\ spans=\\1:11\\ x14ac:dyDescent=\\0.2\\>"))
+                              )
+
+
+# View the clean data and ensure we have no more strange non-numeric values
 for (col in columns){
-  snow_clean <- snow_cover %>% 
-  mutate(!!sym(col) = ifelse(!!sym(col) == ".", NA, !!sym(col)))
+  snow_clean %>%
+  count(!!sym(col)) %>% 
+  filter(is.na(as.numeric(!!sym(col)))) %>% 
+    print()
 }
-snow_clean
+```
+
+### Going numeric
+
+We've successfully removed all the non-numerica values and replaced them with NAs. Let's convert the type to numeric and move on with our cleaning steps. 
+```{r}
+# Convert from character to numeric
+snow_num <- snow_clean %>% 
+  mutate(Water_cover = as.numeric(Water_cover),
+         Land_cover = as.numeric(Land_cover),
+         Total_cover = as.numeric(Total_cover))
+
+```
+
+#### Fixing ranges and percentages
+
+Let's now handle the negative numbers in the `Land_cover` column. A value of -298 doesn't make sense in this context, so we're going to turn that into NA as well. -100 is a little trickier; it could be that they meant 100 or it could be an error altogether that we should convert to NA. Let's view the entire data frame where `Land_cover` = -100
+
+```{r}
+# Check the other rows around land cover = -100
+snow_num %>% 
+  filter(Land_cover == -100)
+```
+
+`Snow_cover` is NA and `Water_cover` is 0, which seems a good indication that `Land_cover` should probably be positive 100. We'll change that here, along with fixing the -280. We'll also ensure there's no values outside the range for `Water_cover`
+
+```{r}
+# Fix values outside of the range for Land cover
+snow_num <- snow_num %>% 
+  mutate(Land_cover = ifelse(Land_cover == -298, NA, Land_cover),
+         Land_cover = ifelse(Land_cover == -100, 100, Land_cover))
+
+# Fix values outside of the range for water cover
+snow_num <- snow_num %>% 
+  mutate(Water_cover = ifelse(Water_cover > 100, NA, Water_cover),
+         Water_cover = ifelse(Water_cover < 0, NA, Water_cover))
+```
+
+
+
+Now that all three cover columns are clean, let's recalculate `Total_cover` to be the sum of the three land cover types.
+
+```{r}
+# Ensure total cover is the sum of the three land covers
+snow_final <- snow_num %>% 
+  # Using rowsSums so we can drop columns with NAs and still have a value for total_cover
+  mutate(Total_cover_clean = rowSums(across(c(Snow_cover, 
+                                              Water_cover, 
+                                              Land_cover)), na.rm = TRUE))
+```
+
+With our final cleaning step done, we can export the dataframe!
+
+```{r}
+# Export clean csv
+write_csv(snow_final, file.path("data", "processed", "all_cover_fixed_hayleeoyler.csv"))
 
 ```
 
