@@ -28,30 +28,45 @@ glimpse(snow_cover)
 
 ### Data exploration 
 
-We can see that the type for `Water_cover`, `Land_cover` and `Total_cover` are not what we expect. Let's follow similar steps from our in-class exercise with `Snow_cover` to clean these three columns
+We can see that the type for `Water_cover`, `Land_cover` and `Total_cover` are not what we expect. Let's follow similar steps from our in-class exercise with `Snow_cover` to clean these columns
 
 ```{r}
-# Make a list so we can do this iteratively 
-columns <- c('Water_cover', 'Land_cover', 'Total_cover')
+# # Make a list so we can do this iteratively 
+# columns <- c('Water_cover', 'Land_cover', 'Total_cover')
+# 
+# # Check out counts for all three variables
+# for (col in columns) {
+#   snow_cover %>% 
+#     count(!!sym(col)) %>% # !!sym allows the column names to be interpreted as columns, not strings
+#     print()
+# }
 
-# Check out counts for all three variables
-for (col in columns) {
-  snow_cover %>% 
-    count(!!sym(col)) %>% # !!sym allows the column names to be interpreted as columns, not strings
-    print()
-}
+snow_cover %>% 
+  count(Water_cover)
+
+snow_cover %>% 
+  count(Land_cover)
 
 ```
 All three columns count non-numeric values like `.` and `-`. the `Land_cover` column also has some negative values, which seems like it could be an error. 
 
 ```{r}
 # View just the rows that show as NA when converting to numeric
-for (col in columns){
-  snow_cover %>%
-  count(!!sym(col)) %>% 
-  filter(is.na(as.numeric(!!sym(col)))) %>% 
-    print()
-}
+# for (col in columns){
+#   snow_cover %>%
+#   count(!!sym(col)) %>% 
+#   filter(is.na(as.numeric(!!sym(col)))) %>% 
+#     print()
+# }
+
+snow_cover %>%
+  count(Water_cover) %>%
+  filter(is.na(as.numeric(Water_cover)))
+               
+snow_cover %>%
+  count(Land_cover) %>%
+  filter(is.na(as.numeric(Land_cover)))
+
 
 ```
 All three variables having non-numeric values of `.`, `-`, and `n/a`. `Water_cover` and `Land_cover` also have `unk` as a non-numeric value and `Total_cover` has a row tag entry that seems like an error. We will remove these all at once in the next section
@@ -71,12 +86,7 @@ snow_clean <- replace_with_na(snow_cover,
 
 
 # View the clean data and ensure we have no more strange non-numeric values
-for (col in columns){
-  snow_clean %>%
-  count(!!sym(col)) %>% 
-  filter(is.na(as.numeric(!!sym(col)))) %>% 
-    print()
-}
+
 ```
 
 ### Going numeric
