@@ -1,11 +1,8 @@
-# Cleaning the shorebird survey data 
-
-
-## The data set
+# Arctic Shorebird Snow Cover Data
 
 ARCTIC SHOREBIRD DEMOGRAPHICS NETWORK [https://doi.org/10.18739/A2222R68W](https://doi.org/10.18739/A2222R68W)
 
-Data set hosted by the [NSF Arctic Data Center](https://arcticdata.io) data repository 
+This dataset is hosted by the [NSF Arctic Data Center](https://arcticdata.io). Complete metadata for can be found at `01_ASDN_Readme.txt` provided in the [EDS 213 course repository](https://github.com/UCSB-Library-Research-Data-Services/bren-meds213-spring-2024-class-data/week1).
 
 Field data on shorebird ecology and environmental conditions were collected from 1993-2014 at 16 field sites in Alaska, Canada, and Russia.
 
@@ -15,21 +12,37 @@ Data were not collected every year at all sites. Studies of the population ecolo
 
 Data on climatic conditions, prey abundance, and predators were also collected. Environmental data included weather stations that recorded daily climatic conditions, surveys of seasonal snowmelt, weekly sampling of terrestrial and aquatic invertebrates that are prey of shorebirds, live trapping of small mammals (alternate prey for shorebird predators), and daily counts of potential predators (jaegers, falcons, foxes). Detailed field methods for each year are available in the `ASDN_protocol_201X.pdf` files. All research was conducted under permits from relevant federal, state, and university authorities.
 
-See `01_ASDN_Readme.txt` provided in the [course data repository](https://github.com/UCSB-Library-Research-Data-Services/bren-meds213-spring-2024-class-data) for full metadata information about this data set.
-
-# Arctic Shorebird Snow Cover Data
-
-This dataset is hosted by the [NSF Arctic Data Center](https://arcticdata.io). Complete metadata for can be found at `01_ASDN_Readme.txt` provided in the [EDS 213 course repository](https://github.com/UCSB-Library-Research-Data-Services/bren-meds213-spring-2024-class-data/week1).
-
 ## Data and File Overview
 
 #### 1. File List
 
-- `all_cover_fixed_hayleeoyler.csv`: contains the cleaned land cover type data. This includes percentages of snow cover, land cover, water cover, and total cover for the arctic shorebirds habitats. This is the cleaned version of the data originally found in `ASDN_Snow_Survey.csv`
+- `data/processed/all_cover_fixed_hayleeoyler.csv`: contains the cleaned land cover type data. This includes percentages of snow cover, land cover, water cover, and total cover for the arctic shorebirds habitats. This is the cleaned version of the data originally found in `ASDN_Snow_Survey.csv`
+- `data/processed/snow_cover.csv`: contains the partially cleaned data that cleaned only the `snow_cover` variable. This was done as part of an in-class exercise
+
+- `data/raw/01_ASDN_Readme.txt`: The original data repository readme. Contains detailed metadata information about all datasets.
+- `ASDN_Daily_species.csv`: Dataset containing shorebird species information.
+- `ASDN_Snow_survey.csv`: Dataset containing the unprocessed snow survey data.
+
+- `eds213_data_cleaning_assign_hayleeoyler.qmd`: Working document for the data cleaning process. Associated files and html for rendering and easier viewing. 
 
 #### 2. Relationship Between Files
-
+```
+├── README.md
+├── bren-meds213-data-cleaning.Rproj
+├── data
+│   ├── processed
+│   │   ├── all_cover_fixed_hayleeoyler.csv        # Clean snow survey data
+│   │   └── snow_cover.csv
+│   └── raw
+│       ├── 01_ASDN_Readme.txt
+│       ├── ASDN_Daily_species.csv
+│       └── ASDN_Snow_survey.csv                   # Unprocessed snow survey data
+├── eds213_data_cleaning_assign_hayleeoyler.html 
+├── eds213_data_cleaning_assign_hayleeoyler.qmd	   # Working doc to clean the snow survey data
+└── eds213_data_cleaning_assign_hayleeoyler_files
+```
 #### 3. Additional related data collected that was not included in the current data package
+The additional datasets can be accessed at the referenced parent dataset either from the [original source](https://arcticdata.io/catalog/view/doi%3A10.18739%2FA2CD5M), or from the [course repository](https://github.com/UCSB-Library-Research-Data-Services/bren-eds213-data/tree/main/ASDN_csv). 
 
 #### 4. Are there multiple versions of the dataset?
 
