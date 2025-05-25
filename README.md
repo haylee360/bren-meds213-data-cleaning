@@ -43,27 +43,31 @@ For the file  data/processed/all_cover_fixed_hayleeoyler.csv :
 11
 
 #### 2. Number of cases/rows:
-
+42830
 
 #### 3.  Variable List: list variable name(s), description(s), unit(s)and value labels as appropriate for each
-Column Name   | Definition                                                
-------------- | ---------------------------------------------------------
-Site          | Four-letter code of site at which data were collected        
-Year          | Year in which data were collected               
-Date          | Date on which data were collected               
-Plot          | Name of study plot on which survey was conducted             
-Location      | Name of dedicated snow-survey location, if applicable 
-Snow_cover    | Percent cover of snow, including slush
-Water_cover   | Percent cover of water
-Land_cover    | Percent cover of exposed land
-Total_cover   | Total sum (to check the above percents; should always sum to 100)
-Observer      | Person who conducted the survey
-Notes         | Any relevant comments on the survey
+
+Column Name   | Definition                                                | Units
+------------- | --------------------------------------------------------- | -----
+Site          | Four-letter code of site at which data were collected     | N/A
+Year          | Year in which data were collected                         | YYYY
+Date          | Date on which data were collected                         | DD-MM-YYYY
+Plot          | Name of study plot on which survey was conducted          | N/A
+Location      | Name of dedicated snow-survey location, if applicable     | N/A
+Snow_cover    | Percent cover of snow, including slush                    | Percentage
+Water_cover   | Percent cover of water                                    | Percentage
+Land_cover    | Percent cover of exposed land                             | Percentage
+Total_cover   | Total sum (should always sum to 100)                      | Percentage
+Observer      | Person who conducted the survey                           | N/A
+Notes         | Any relevant comments on the survey                       | N/A
 
 #### 4. Missing data codes: list code/symbol and definition
 NA : Missing data. This data is missing either because of syntax errors during the data entry/recording process that were not interpretable, or because the missing data for a specific cover type could not be mathematically calculated given the corresponding values for the other cover types. 
 
+Specifically, all non-numeric values for Snow cover, Land cover, and Water cover were replaced with NA. Additionally, any cover values that were far outside the range of 0-100 were removed. Some leeway was added (up to 120) for the total cover to account for possible calculation errors; this was to ensure we saved as much data as possible. Values for total cover were recalculated as the sum of the other three cover variables. In places where only two cover types were available, the missing cover type was filled by assuming the total cover was 100 and subtracting the difference of the two present cover types. 
+
 #### 5. Specialized formats or other abbreviations used:
+`Site` is abbreviated with a four-letter code that represents the sampling site. More detailed information about the site's name and description can be found in the data file `site.csv` [here](https://github.com/UCSB-Library-Research-Data-Services/bren-meds213-data-cleaning/tree/main/data/raw).
 
 ## Sharing and Access Information
 
@@ -73,8 +77,10 @@ Potential users of these data should first contact the relevant data author(s), 
 #### 2. Links to publications that cite or use the data:
 
 #### 3. Links to other publicly accessible locations of the data:
+This data can be accessed via the National Science Foundation's [Arctic Data Center](https://arcticdata.io/catalog/view/doi%3A10.18739%2FA2CD5M)
 
 #### 4. Links/relationships to ancillary data sets: any supplementary data sources that support analysis or classification of the datasets, eg., plant taxonomy table.
+NA
 
 #### 5. Was data derived from another source? If yes, list source(s): list citations to original sources
 This is the cleaned version of the data originally found in `ASDN_Snow_Survey.csv` from the same data source. The original dataset is not derived from another source. 
