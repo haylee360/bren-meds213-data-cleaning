@@ -89,6 +89,10 @@ Potential users of these data should first contact the relevant data author(s), 
 
 #### 2. Links to publications that cite or use the data:
 
+- [Life-history tradeoffs revealed by seasonal declines in reproductive traits of Arctic-breeding shorebirds](https://www.researchgate.net/publication/320616760_Life-history_tradeoffs_revealed_by_seasonal_declines_in_reproductive_traits_of_Arctic-breeding_shorebirds)
+- [Annual adult survival drives trends in Arctic-breeding shorebirds but knowledge gaps in other vital rates remain](https://academic.oup.com/condor/article/122/3/duaa026/5857122)
+- [Environmental and ecological conditions at Arctic breeding sites have limited effects on true survival rates of adult shorebirds](https://bioone.org/journals/the-auk/volume-135/issue-1/AUK-17-107.1/Environmental-and-ecological-conditions-at-Arctic-breeding-sites-have-limited/10.1642/AUK-17-107.1.full)
+
 #### 3. Links to other publicly accessible locations of the data:
 This data can be accessed via the National Science Foundation's [Arctic Data Center](https://arcticdata.io/catalog/view/doi%3A10.18739%2FA2CD5M)
 
